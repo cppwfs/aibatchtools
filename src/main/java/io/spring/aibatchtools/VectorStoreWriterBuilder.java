@@ -1,6 +1,5 @@
 package io.spring.aibatchtools;
 
-import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.util.Assert;
 
