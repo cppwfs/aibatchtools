@@ -1,7 +1,9 @@
 package io.spring.aibatchtools;
 
-import java.util.List;
+import java.util.Collections;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.batch.item.Chunk;
@@ -9,6 +11,9 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.InitializingBean;
 
 public class VectorStoreWriter<T> implements ItemWriter<T>, InitializingBean {
+
+    private final Logger logger =  LoggerFactory.getLogger(this.getClass());
+
 
     private VectorStore vectorStore;
 
@@ -21,12 +26,11 @@ public class VectorStoreWriter<T> implements ItemWriter<T>, InitializingBean {
     @Override
     public void write(Chunk<? extends T> chunk) {
         for(T item : chunk.getItems()) {
-            System.out.println("Writing");
-            List<Document> documents = (List<Document>) item;
-            vectorStore.accept(documents);
+            logger.info("Writing doc");
+            Document documents = (Document) item;
+            vectorStore.accept(Collections.singletonList(documents));
 
         }
-
     }
 
     public VectorStore getVectorStore() {
