@@ -24,15 +24,17 @@ public class VectorStoreWriter<T> implements ItemWriter<T>, InitializingBean {
 
     @Override
     public void write(Chunk<? extends T> chunk) {
-        List<Document> documents = new ArrayList<>();
+//        List<Document> documents = new ArrayList<>();
         for(T item : chunk.getItems()) {
-            BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(item);
-            if (StringUtils.isBlank((String)beanWrapper.getPropertyValue(contentFieldName))) {
-                continue;
-            }
-            documents.add(new Document((String) beanWrapper.getPropertyValue(contentFieldName), (java.util.Map<String,Object>)beanWrapper.getPropertyValue(metadataFieldName)));
+//            BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(item);
+//            if (StringUtils.isBlank((String)beanWrapper.getPropertyValue(contentFieldName))) {
+//                continue;
+//            }
+//            documents.add(new Document((String) beanWrapper.getPropertyValue(contentFieldName), (java.util.Map<String,Object>)beanWrapper.getPropertyValue(metadataFieldName)));
+            List<Document> documents = (List<Document>) item;
+            vectorStore.accept(documents);
+
         }
-        vectorStore.accept(documents);
 
     }
 
