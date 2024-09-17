@@ -1,15 +1,11 @@
 package io.spring.aibatchtools;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.micrometer.common.util.StringUtils;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 public class VectorStoreWriter<T> implements ItemWriter<T>, InitializingBean {
@@ -24,13 +20,8 @@ public class VectorStoreWriter<T> implements ItemWriter<T>, InitializingBean {
 
     @Override
     public void write(Chunk<? extends T> chunk) {
-//        List<Document> documents = new ArrayList<>();
         for(T item : chunk.getItems()) {
-//            BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(item);
-//            if (StringUtils.isBlank((String)beanWrapper.getPropertyValue(contentFieldName))) {
-//                continue;
-//            }
-//            documents.add(new Document((String) beanWrapper.getPropertyValue(contentFieldName), (java.util.Map<String,Object>)beanWrapper.getPropertyValue(metadataFieldName)));
+            System.out.println("Writing");
             List<Document> documents = (List<Document>) item;
             vectorStore.accept(documents);
 
