@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.tika.TikaDocumentReader;
+import org.springframework.ai.transformer.splitter.TextSplitter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
@@ -19,21 +20,22 @@ public class TikaItemReader extends AbstractItemStreamItemReader<Document> {
 
     private Resource resource;
 
-    TikaDocumentReader tikaDocumentReader;
+    private TikaDocumentReader tikaDocumentReader;
 
-    List<Document> documents;
+    private List<Document> documents;
 
-    int docCount = 0;
+    private int docCount = 0;
+
+    private TextSplitter textSplitter = new TokenTextSplitter();
 
     @Override
     public Document read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        System.out.println("Tika Created");
         this.tikaDocumentReader = new TikaDocumentReader(resource);
 
         if (this.documents == null) {
+            System.out.println("Tika Created");
             this.documents = tikaDocumentReader.read();
-            TokenTextSplitter splitter = new TokenTextSplitter();
-            this.documents = splitter.apply(documents);
+            this.documents = textSplitter.apply(documents);
         }
         logger.info("Tika Read Complete");
         if (docCount >= documents.size()) {
@@ -49,5 +51,13 @@ public class TikaItemReader extends AbstractItemStreamItemReader<Document> {
 
     public void setResource(Resource resource) {
         this.resource = resource;
+    }
+
+    public TextSplitter getTextSplitter() {
+        return textSplitter;
+    }
+
+    public void setTextSplitter(TextSplitter textSplitter) {
+        this.textSplitter = textSplitter;
     }
 }

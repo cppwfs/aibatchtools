@@ -1,0 +1,23 @@
+= AI Batch Tools
+
+Provides a library containing a set of readers and writers and their associated builders for loading and maintaining vector stores.
+
+
+== Requirements:
+
+* Java 17 or Above
+
+== Readers and Writers:
+
+
+* TikaItemReader - Is a reader that utilizes Apache Tika to read various formats of documents (PDF, HTML, etc) and provides unformatted text contained within the documents.
+* VectorStoreWriter - Is a writer that utilizes Spring AI's VectorStore class to store data into a vector store.
+
+== Build:
+
+[source,shell]
+----
+mvn clean install
+----
+
+

@@ -1,6 +1,7 @@
 package io.spring.aibatchtools;
 
 import java.util.Collections;
+import java.util.function.BiConsumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +27,15 @@ public class VectorStoreWriter<T> implements ItemWriter<T>, InitializingBean {
     @Override
     public void write(Chunk<? extends T> chunk) {
         for(T item : chunk.getItems()) {
+            Document document = (Document) item;
             logger.info("Writing doc");
-            Document documents = (Document) item;
-            vectorStore.accept(Collections.singletonList(documents));
-
+            document.getMetadata().forEach(new BiConsumer<String, Object>() {
+                @Override
+                public void accept(String s, Object o) {
+                    logger.info(s + " " + o);
+                }
+            });
+            vectorStore.accept(Collections.singletonList(document));
         }
     }
 
